@@ -40,6 +40,19 @@ function FloatingParticles() {
 
 export function Hero() {
   const [showModal, setShowModal] = useState<null | "resume" | "cv">(null);
+
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showModal]);
+
   return (
     <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="container mx-auto max-w-6xl relative z-10">
@@ -77,23 +90,42 @@ export function Hero() {
 
             {/* Modal for PDF Viewer */}
             {showModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-                <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-4 relative">
-                  <button
-                    onClick={() => setShowModal(null)}
-                    className="absolute top-2 right-2 text-gray-700 hover:text-red-500 text-2xl font-bold"
-                    aria-label="Close PDF viewer"
-                  >
-                    ×
-                  </button>
-                  <iframe
-                    src={showModal === "resume" ? "/Resume.pdf" : "/CV.pdf"}
-                    width="100%"
-                    height="600px"
-                    style={{ border: "none" }}
-                    title={showModal === "resume" ? "Resume" : "CV"}
-                  ></iframe>
+              <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black bg-opacity-70 animate-fade-in">
+                <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-5xl mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-0 h-[80vh] flex flex-col overflow-hidden border border-gray-200">
+                  {/* Title Bar */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-purple-50 via-cyan-50 to-pink-50">
+                    <span className="text-lg font-bold text-gray-800">
+                      {showModal === "resume" ? "Resume" : "CV"}
+                    </span>
+                    <button
+                      onClick={() => setShowModal(null)}
+                      className="text-gray-500 hover:text-red-500 text-2xl font-bold transition-colors duration-200 rounded-full w-10 h-10 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-red-400"
+                      aria-label="Close PDF viewer"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  {/* PDF Viewer */}
+                  <div className="flex-1 overflow-auto bg-gray-50">
+                    <iframe
+                      src={showModal === "resume" ? "/Resume.pdf" : "/CV.pdf"}
+                      width="100%"
+                      height="100%"
+                      style={{ border: "none", minHeight: "100%" }}
+                      title={showModal === "resume" ? "Resume" : "CV"}
+                      className="w-full h-full rounded-b-2xl"
+                    ></iframe>
+                  </div>
                 </div>
+                <style jsx global>{`
+                  .animate-fade-in {
+                    animation: fadeInModal 0.3s ease;
+                  }
+                  @keyframes fadeInModal {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                  }
+                `}</style>
               </div>
             )}
 
