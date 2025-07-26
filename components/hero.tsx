@@ -39,6 +39,7 @@ function FloatingParticles() {
 }
 
 export function Hero() {
+  const [showModal, setShowModal] = useState<null | "resume" | "cv">(null);
   return (
     <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="container mx-auto max-w-6xl relative z-10">
@@ -65,28 +66,36 @@ export function Hero() {
                 variant="glow"
                 size="lg"
                 className="px-8 py-4 text-lg font-bold"
-                onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={() => setShowModal("resume")}
               >
-                <a
-                   href="/Resume.pdf"
-    target="_blank"
-    rel="noopener noreferrer"
-    //className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
-  >
-    View My Resume
-  </a>
+                View My Resume
               </EnhancedButton>
-              <EnhancedButton variant="neon" size="lg" className="px-8 py-4 text-lg font-bold">
-              <a
-  href="/CV.pdf"
-  target="_blank"
-  rel="noopener noreferrer"
-  //className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-cyan-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform duration-300"
->
-  View My CV
-</a>
+              <EnhancedButton variant="neon" size="lg" className="px-8 py-4 text-lg font-bold" onClick={() => setShowModal("cv")}> 
+                View My CV
               </EnhancedButton>
             </div>
+
+            {/* Modal for PDF Viewer */}
+            {showModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+                <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full p-4 relative">
+                  <button
+                    onClick={() => setShowModal(null)}
+                    className="absolute top-2 right-2 text-gray-700 hover:text-red-500 text-2xl font-bold"
+                    aria-label="Close PDF viewer"
+                  >
+                    ×
+                  </button>
+                  <iframe
+                    src={showModal === "resume" ? "/Resume.pdf" : "/CV.pdf"}
+                    width="100%"
+                    height="600px"
+                    style={{ border: "none" }}
+                    title={showModal === "resume" ? "Resume" : "CV"}
+                  ></iframe>
+                </div>
+              </div>
+            )}
 
             <div className="flex space-x-4">
               <Button variant="ghost" size="icon" className="hover:bg-purple-500/20 transition-colors duration-300">
