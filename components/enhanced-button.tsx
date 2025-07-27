@@ -1,10 +1,21 @@
 "use client"
 
 import type React from "react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { forwardRef } from "react"
 import { cn } from "@/lib/utils"
+
+const PDF_PATHS = {
+  resume: "/Resume.pdf", // ← Change this to your resume file name
+  cv: "/CV.pdf", // ← Change this to your CV file name
+}
+
+const DOWNLOAD_NAMES = {
+  resume: "Raja_Rehan_Mustafa_Resume.pdf",
+  cv: "Raja_Rehan_Mustafa_CV.pdf",
+}
 
 interface EnhancedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?:
